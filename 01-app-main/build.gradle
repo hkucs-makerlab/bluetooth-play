@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.makerlab.cam'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 23
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        buildConfig true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    flavorDimensions 'bluetooth'
+    productFlavors {
+        ble {
+            applicationId "com.makerlab.bluetooth_play_ble"
+            dimension 'bluetooth'
+            minSdk 23
+        }
+        spp {
+            applicationId "com.makerlab.bluetooth_play"
+            dimension 'bluetooth'
+            minSdk 23
+        }
+    }
+    /*    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+
+    }*/
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation project(path: ':02-button-cntl')
+    implementation project(path: ':02-mjpeg-show')
+    implementation project(path: ':02-cam-setting')
+    bleImplementation project(':libBT')
+    sppImplementation project(':libspp')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
