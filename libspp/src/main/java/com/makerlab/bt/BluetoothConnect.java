@@ -59,7 +59,7 @@ public class BluetoothConnect implements Serializable {
     }
 
     @SuppressLint("MissingPermission")
-    public void disconnect() {
+    synchronized public void disconnect() {
         Log.d(LOG_TAG, "disconnect() " + Build.MODEL);
         if (mOutputStream != null) {
             try {
@@ -93,7 +93,7 @@ public class BluetoothConnect implements Serializable {
         }*/
     }
 
-    public void connect() {
+    private void connect() {
         Log.d(LOG_TAG, "connect()");
         //
         Thread th = new Thread() {
@@ -120,13 +120,13 @@ public class BluetoothConnect implements Serializable {
         //while (th.isAlive())
     }
 
-    public void connect(String address) {
+    synchronized public void connect(String address) {
         if (setDevice(address)) {
             connect();
         }
     }
 
-    public void connect(BluetoothDevice device) {
+    synchronized public void connect(BluetoothDevice device) {
         setDevice(device);
         connect();
     }

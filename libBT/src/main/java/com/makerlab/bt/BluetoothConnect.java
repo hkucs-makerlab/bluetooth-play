@@ -45,6 +45,7 @@ public class BluetoothConnect implements Serializable {
     private BufferedReader mBufferReader;
     public String mErrorString = "";
     private ByteArrayOutputStream mOutputByteStream;
+
     public BluetoothConnect(Activity activity) {
         mActivity = activity;
         mConnectionStateCallback = new ConnectionStateCallback();
@@ -72,7 +73,7 @@ public class BluetoothConnect implements Serializable {
     @SuppressLint("MissingPermission")
     public boolean isConnected() {
         boolean flag = false;
-        if (mBluetoothDevice ==null) return false;
+        if (mBluetoothDevice == null) return false;
         if (mBluetoothDevice.getType() == BluetoothDevice.DEVICE_TYPE_CLASSIC) {
             flag = (mBluetoothSocket.isConnected() && mOutputStream != null);
         }
@@ -83,9 +84,9 @@ public class BluetoothConnect implements Serializable {
     }
 
     @SuppressLint("MissingPermission")
-    public void disconnect() {
+    synchronized public void disconnect() {
         Log.d(LOG_TAG, "disconnect() " + Build.MODEL);
-        if (mBluetoothDevice ==null) return;
+        if (mBluetoothDevice == null) return;
         if (mBluetoothDevice.getType() == BluetoothDevice.DEVICE_TYPE_LE) {
             if (mBluetoothGatt != null) {
                 mBluetoothGatt.close();
@@ -125,7 +126,7 @@ public class BluetoothConnect implements Serializable {
     }
 
     @SuppressLint("MissingPermission")
-    public void connect() {
+    synchronized public void connect() {
 
         Thread th;
 
@@ -171,13 +172,13 @@ public class BluetoothConnect implements Serializable {
         //while (th.isAlive())
     }
 
-    public void connect(String address) {
+    synchronized public void connect(String address) {
         if (setDevice(address)) {
             connect();
         }
     }
 
-    public void connect(BluetoothDevice device) {
+    synchronized public void connect(BluetoothDevice device) {
         setDevice(device);
         connect();
     }
