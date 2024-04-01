@@ -37,7 +37,8 @@ public class ControlActivity extends AppCompatActivity implements
     private AlertDialog.Builder mAlertBuilder;
 
     private BluetoothConnect mBluetoothConnect;
-    int command;
+    private int command=0;
+    private boolean readyToSend=false;
     private Timer mTimer = null;
     private PlainTextProtocol mPlainText;
     MjpegView mJpegViewer;
@@ -152,6 +153,7 @@ public class ControlActivity extends AppCompatActivity implements
             return;
         }
         Log.d(LOG_TAG, "onClick() button pressed");
+        readyToSend=true;
         if (v == mButtonCenter) {
             command = 5;
         } else if (v == mButtonUp) {
@@ -249,7 +251,9 @@ public class ControlActivity extends AppCompatActivity implements
         @Override
         public void run() {
             byte[] payload = mPlainText.getPayload(command);
+            if (!readyToSend) return;
             mBluetoothConnect.send(payload);
+            readyToSend=false;
         }
     }
 }
